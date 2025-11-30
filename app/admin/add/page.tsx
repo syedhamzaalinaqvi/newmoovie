@@ -60,7 +60,9 @@ export default function AddContentPage() {
                 details = await tmdb.getSeriesDetails(id);
             }
 
-            const success = storage.addContent(details, searchType);
+            // Convert 'tv' to 'series' for storage
+            const storageType: 'movie' | 'series' = searchType === 'movie' ? 'movie' : 'series';
+            const success = storage.addContent(details, storageType);
 
             if (success) {
                 alert(`Successfully added ${searchType === 'movie' ? 'movie' : 'series'}!`);
