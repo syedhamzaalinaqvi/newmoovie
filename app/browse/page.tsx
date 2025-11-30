@@ -12,13 +12,10 @@ export default function BrowsePage() {
     const [content, setContent] = useState<(Movie | Series)[]>([]);
     const [genres, setGenres] = useState<Genre[]>([]);
     const [loading, setLoading] = useState(true);
-
-    const [selectedType, setSelectedType] = useState<'movie' | 'tv'>(
-        (searchParams.get('type') as 'movie' | 'tv') || 'movie'
-    );
+    const [selectedType, setSelectedType] = useState<'movie' | 'tv'>('movie');
     const [selectedGenre, setSelectedGenre] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('');
-    const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
+    const [searchQuery, setSearchQuery] = useState('');
 
     const countries = [
         { code: 'US', name: 'United States' },
@@ -30,6 +27,19 @@ export default function BrowsePage() {
         { code: 'ES', name: 'Spain' },
         { code: 'DE', name: 'Germany' },
     ];
+
+    // Initialize from URL params
+    useEffect(() => {
+        const type = searchParams.get('type') as 'movie' | 'tv';
+        const search = searchParams.get('search');
+
+        if (type && (type === 'movie' || type === 'tv')) {
+            setSelectedType(type);
+        }
+        if (search) {
+            setSearchQuery(search);
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         const fetchGenres = async () => {
